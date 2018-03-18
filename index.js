@@ -241,6 +241,15 @@ const fromAST = (node, parentNode = null) => {
     return element;
   }
 };
+const toAST = ({nodeName = null, tagName = '', attrs = [], childNodes = [], value = null}) => ({
+  nodeName,
+  tagName: tagName.toLowerCase(),
+  attrs,
+  childNodes: childNodes.map(toAST),
+  value: nodeName === '#text' ? value : null,
+  data: nodeName === '#comment' ? value : null,
+  name: nodeName === '#documentType' ? value : null,
+});
 const traverse = (node, fn) => {
   const _recurse = node => {
     const result = fn(node);
@@ -280,6 +289,7 @@ module.exports = {
   Text,
   Comment,
   fromAST,
+  toAST,
   traverse,
   traverseAsync,
 };
