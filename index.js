@@ -200,6 +200,13 @@ class Comment extends Node {
     return `<!--${this.value}-->`;
   } */
 }
+class DocType extends Node {
+  constructor(value) {
+    super('#documentType');
+
+    this.value = value;
+  }
+}
 
 const fromAST = (node, parentNode = null) => {
   if (node.nodeName === '#text') {
@@ -210,6 +217,10 @@ const fromAST = (node, parentNode = null) => {
     const comment = new Comment(node.data);
     comment.parentNode = parentNode;
     return comment;
+  } else if (node.nodeName === '#documentType') {
+    const docType = new DocType(node.name);
+    docType.parentNode = parentNode;
+    return docType;
   } else {
     const tagName = node.tagName && node.tagName.toUpperCase();
     const {attrs, value, __location} = node;
